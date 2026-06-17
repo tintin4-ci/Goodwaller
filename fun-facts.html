@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Fun Facts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .fact-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-left: 5px solid #667eea;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fact-text {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .fact-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .secondary-btn {
+            background: #f0f0f0;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .secondary-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .fact-counter {
+            text-align: center;
+            color: #999;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .copy-feedback {
+            text-align: center;
+            color: #4caf50;
+            font-size: 0.9em;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Fun Facts</h1>
+        <p class="subtitle">Discover something new every day!</p>
+
+        <div class="fact-card">
+            <div class="fact-icon">💡</div>
+            <div class="fact-text" id="factText">Click "Get a Fact" to discover something amazing!</div>
+        </div>
+
+        <div class="button-group">
+            <button onclick="getRandomFact()">✨ Get a Fact</button>
+            <button class="secondary-btn" onclick="copyFact()">📋 Copy</button>
+            <button class="secondary-btn" onclick="toggleFacts()">🔄 Toggle List</button>
+        </div>
+
+        <div class="fact-counter">
+            <span id="counter">Ready for facts!</span>
+        </div>
+
+        <div class="copy-feedback" id="feedback"></div>
+
+        <div id="factsList" style="display: none; margin-top: 30px;">
+            <h3 style="color: #667eea; margin-bottom: 15px;">📚 All Facts:</h3>
+            <ul id="allFacts" style="list-style: none; color: #555; line-height: 2;"></ul>
+        </div>
+    </div>
+
+    <script>
+        const facts = [
+            "🐙 Octopuses have three hearts and blue blood!",
+            "🍓 Strawberries are not actually berries, but bananas are!",
+            "👀 Honey never spoils. Archaeologists have found 3,000-year-old honey in Egyptian tombs that was still edible.",
+            "🦖 A group of flamingos is called a 'flamboyance'.",
+            "⚡ Honey bees can recognize human faces.",
+            "🌍 The Earth moves through space at about 490,000 mph!",
+            "🧠 Your brain uses 20% of your body's energy, despite being only 2% of your body weight.",
+            "🦑 Squids can taste with their tentacles.",
+            "☕ Coffee was discovered by goats - according to legend!",
+            "🌙 A day on Venus is longer than its year.",
+            "🦋 Butterflies taste with their feet.",
+            "🐢 Turtles can breathe through their butts!",
+            "👃 Your nose can remember 50,000 different scents.",
+            "💤 You can't sneeze while sleeping because the nerves needed are relaxed.",
+            "🐧 Penguins have knees and can walk upright.",
+            "🌟 A group of porcupines is called a 'prickle'.",
+            "🐢 Sea turtles cry salt water to get rid of excess salt.",
+            "🍌 Bananas are berries, but strawberries aren't!",
+            "🧬 You share 50% of your DNA with bananas.",
+            "📚 The smell of books comes from over 400 organic compounds."
+        ];
+
+        let currentFact = "";
+        let factCount = 0;
+
+        function getRandomFact() {
+            currentFact = facts[Math.floor(Math.random() * facts.length)];
+            document.getElementById('factText').textContent = currentFact;
+            factCount++;
+            updateCounter();
+            clearFeedback();
+        }
+
+        function copyFact() {
+            if (currentFact) {
+                navigator.clipboard.writeText(currentFact).then(() => {
+                    const feedback = document.getElementById('feedback');
+                    feedback.textContent = '✅ Copied to clipboard!';
+                    setTimeout(() => clearFeedback(), 2000);
+                });
+            } else {
+                alert('Please get a fact first!');
+            }
+        }
+
+        function updateCounter() {
+            document.getElementById('counter').textContent = `Facts discovered: ${factCount}`;
+        }
+
+        function clearFeedback() {
+            document.getElementById('feedback').textContent = '';
+        }
+
+        function toggleFacts() {
+            const list = document.getElementById('factsList');
+            list.style.display = list.style.display === 'none' ? 'block' : 'none';
+            
+            if (list.style.display === 'block') {
+                populateFactsList();
+            }
+        }
+
+        function populateFactsList() {
+            const allFacts = document.getElementById('allFacts');
+            allFacts.innerHTML = facts.map(fact => `<li>• ${fact}</li>`).join('');
+        }
+
+        // Get initial fact on page load
+        window.addEventListener('load', getRandomFact);
+    </script>
+</body>
+</html>
